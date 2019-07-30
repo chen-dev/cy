@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>xScroll.js 一款轻量级元素滚动插件</title>
+    <!-- <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.1/normalize.css"> -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css">
+    <style>
+    .hua {
+        background: url("http:/www.i2mago.com/images/contact-bg.jpg") top center no-repeat;
+        background-size: 100%;
+        background-attachment: fixed;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .img {
+        width: 457px;
+        margin: 0px auto;
+        display: block;
+        transition: all 1s;
+    }
+
+    .zhezhao {
+        position: absolute;
+        width: 457px;
+        height: 366px;
+        top: 366px;
+        left: 0;
+        background: rgba(0, 0, 0, .5);
+        transition: all .6s;
+        z-index: 10;
+    }
+
+    .text {
+        position: absolute;
+        color: #fff;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: all 1s;
+        z-index: 20;
+    }
+
+    .img:hover {
+        /*transform: scale(1.2);*/
+        /*transform: scale(1.5) rotateZ(-25deg);*/
+    }
+
+    .div {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #000;
+        transition: top 1s, right 1.3s;
+
+        position: absolute;
+        top: 340px;
+        right: 0;
+    }
+
+    .div:hover {
+        top: 250px;
+        left: 50px;
+    }
+    li{
+    	float: left;
+        list-style: none;
+    }
+    .clear{
+    	content: "";
+    	clear: both;
+    	overflow: hidden;
+    	zoom: 1;
+    }
+    </style>
+</head>
+
+<body>
+    <div style="width: 100%;height: 1000px;background: #ccc;">
+        1
+    </div>
+    <div >
+        <ul class="clear" >
+            <li class="scroll" data-animation="rollIn">
+                <div id="item"></div>
+                <div>
+                    <div style="position: relative;width: 457px;height: 366px;margin:20px auto;overflow: hidden;">
+                        <img src="./10.jpg" alt="" class="img">
+                        <div class="zhezhao"></div>
+                        <p class="text">老干妈</p>
+                        <div class="div"></div>
+                    </div>
+                </div>
+            </li>
+            <li  class="scroll" data-animation="rollIn" style="animation-delay: .5s;">
+                <div id="item"></div>
+                <div>
+                    <div style="position: relative;width: 457px;height: 366px;margin:20px auto;overflow: hidden;">
+                        <img src="./10.jpg" alt="" class="img">
+                        <div class="zhezhao"></div>
+                        <p class="text">老干妈</p>
+                        <div class="div"></div>
+                    </div>
+                </div>
+            </li>
+            <li  class="scroll" data-animation="lightSpeedIn" style="animation-delay: .7s;">
+                <div id="item"></div>
+                <div>
+                    <div style="position: relative;width: 457px;height: 366px;margin:20px auto;overflow: hidden;">
+                        <img src="./10.jpg" alt="" class="img">
+                        <div class="zhezhao"></div>
+                        <p class="text">老干妈</p>
+                        <div class="div"></div>
+                    </div>
+                </div>
+            </li>
+            <li  class="scroll" data-animation="lightSpeedIn" style="animation-delay: .5s;">
+                <div id="item"></div>
+                <div>
+                    <div style="position: relative;width: 457px;height: 366px;margin:20px auto;overflow: hidden;">
+                        <img src="./10.jpg" alt="" class="img">
+                        <div class="zhezhao"></div>
+                        <p class="text">老干妈</p>
+                        <div class="div"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/1.8.3/jquery.min.js"></script>
+    <script src="js/isScroll.js"></script>
+    <!-- http://www.i2mago.com/images/contact-bg.jpg -->
+    <!-- <script src="js/prism.js"></script> -->
+    <script>
+    $(function() {
+        $(".img").mouseenter(function(event) {
+            /* Act on the event */
+            $(this).next().next().next().css({ "top": "120px", "right": "200px" });
+            $(this).next().next().css({ "top": "120px", "opacity": "1" });
+            $(this).next().css({ "top": "0px" });
+            $(this).css({ "transform": "scale(1.5) rotateZ(-25deg)" });
+        });
+        $(".zhezhao").mouseleave(function(event) {
+            /* Act on the event */
+            $(".text").css({ "top": "100px", "opacity": "0" });
+            $(".zhezhao").css({ "top": "366px" });
+            $(".img").css({ "transform": "scale(1) rotateZ(0deg)" });
+        });
+    })
+    </script>
+    <script>
+    $(".scroll").xScroll();
+
+    const ScrollTop = (number = 0, time) => {
+        if (!time) {
+            document.body.scrollTop = document.documentElement.scrollTop = number;
+            return number;
+        }
+        const spacingTime = 20; // 设置循环的间隔时间  值越小消耗性能越高
+        let spacingInex = time / spacingTime; // 计算循环的次数
+        let nowTop = document.body.scrollTop + document.documentElement.scrollTop; // 获取当前滚动条位置
+        let everTop = (number - nowTop) / spacingInex; // 计算每次滑动的距离
+        let scrollTimer = setInterval(() => {
+            if (spacingInex > 0) {
+                spacingInex--;
+                ScrollTop(nowTop += everTop);
+            } else {
+                clearInterval(scrollTimer); // 清除计时器
+            }
+        }, spacingTime);
+    };
+    // ScrollTop(1500,300);
+    </script>
+</body>
+
+</html>
